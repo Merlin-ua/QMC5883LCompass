@@ -9,7 +9,7 @@ class QMC5883LCompass{
 	
   public:
     QMC5883LCompass();
-	void init();
+	void init(TwoWire* wire = &Wire);
     void setADDR(byte b);
     void setMode(byte mode, byte odr, byte rng, byte osr);
 	void setSmoothing(byte steps, bool adv);
@@ -24,6 +24,7 @@ class QMC5883LCompass{
 	void getDirection(char* myArray, int azimuth);
 	
   private:
+	TwoWire* _wire;
     void _writeReg(byte reg,byte val);
 	int _get(int index);
 	bool _smoothUse = false;
