@@ -66,11 +66,19 @@ QMC5883LCompass::QMC5883LCompass() {
 	
 	@since v0.1;
 **/
-void QMC5883LCompass::init(TwoWire* wire){
+int QMC5883LCompass::init(TwoWire* wire){
 	_wire = wire;
 	_wire->begin();
-	_writeReg(0x0B,0x01);
-	setMode(0x01,0x0C,0x10,0X00);
+	int error = 0;
+	error = _writeReg(0x0B,0x01);
+	if (error > 0) {
+		return error;
+	}
+	error = setMode(0x01,0x0C,0x10,0X00);
+	if (error > 0) {
+		return error;
+	}
+	return 0;
 }
 
 
@@ -95,11 +103,11 @@ void QMC5883LCompass::setADDR(byte b){
 	@since v0.1;
 **/
 // Write register values to chip
-void QMC5883LCompass::_writeReg(byte r, byte v){
+int QMC5883LCompass::_writeReg(byte r, byte v){
 	_wire->beginTransmission(_ADDR);
 	_wire->write(r);
 	_wire->write(v);
-	_wire->endTransmission();
+	return _wire->endTransmission();
 }
 
 
@@ -110,8 +118,8 @@ void QMC5883LCompass::_writeReg(byte r, byte v){
 	@since v0.1;
 **/
 // Set chip mode
-void QMC5883LCompass::setMode(byte mode, byte odr, byte rng, byte osr){
-	_writeReg(0x09,mode|odr|rng|osr);
+int QMC5883LCompass::setMode(byte mode, byte odr, byte rng, byte osr){
+	return _writeReg(0x09,mode|odr|rng|osr);
 }
 
 

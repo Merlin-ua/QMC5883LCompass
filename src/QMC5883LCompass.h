@@ -9,9 +9,9 @@ class QMC5883LCompass{
 	
   public:
     QMC5883LCompass();
-	void init(TwoWire* wire = &Wire);
+	int init(TwoWire* wire = &Wire);
     void setADDR(byte b);
-    void setMode(byte mode, byte odr, byte rng, byte osr);
+        int setMode(byte mode, byte odr, byte rng, byte osr);
 	void setSmoothing(byte steps, bool adv);
 	void setCalibration(int x_min, int x_max, int y_min, int y_max, int z_min, int z_max);
     void setReset();
@@ -25,12 +25,12 @@ class QMC5883LCompass{
 	
   private:
 	TwoWire* _wire;
-    void _writeReg(byte reg,byte val);
+        int _writeReg(byte reg,byte val);
 	int _get(int index);
 	bool _smoothUse = false;
 	byte _smoothSteps = 5;
 	bool _smoothAdvanced = false;
-    byte _ADDR = 0x0D;
+        byte _ADDR = 0x0D;
 	int _vRaw[3] = {0,0,0};
 	int _vHistory[10][3];
 	int _vScan = 0;
